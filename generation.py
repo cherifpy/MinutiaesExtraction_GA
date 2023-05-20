@@ -4,6 +4,7 @@ from searchspace import *
 import time
 import csv
 import copy
+import json
 
 def InitPopulation(population_size,version="dynamic"):
 
@@ -55,7 +56,7 @@ def Fitness(version_encodage,individual,optimizer=None,input_shape=(),
                      nb_classe=2,train_set = [],
                      test_set=[],nb_epochs = 4, 
                      batch_size = 100,validation_split = 0.2):
-    
+    """
     try:
         
         model = CreateModel1(optimizer=optimizer,input_shape=input_shape,
@@ -67,13 +68,13 @@ def Fitness(version_encodage,individual,optimizer=None,input_shape=(),
         #print(f"test loss:{test_loss}, test accuracy:{test_acc}")
     except:
         return 0,0,0
+    """
     
-    
-    return train_acc,test_loss,test_acc
+    return random.random(),random.random(),random.random()#train_acc,test_loss,test_acc
 
 def EvaluatePopulation(version_endcodage,population = [], optimizer = None,input_shape=(),
                         train_set = [], test_set=[], nb_epochs = 15,
-                        batch_size = 50,file_path1=None,file_path2=None):
+                        batch_size = 50,file_path1=None,file_path2=None,memorie_path=None):
 
     evaluation = []
     if len(train_set) != 0: 
@@ -81,12 +82,18 @@ def EvaluatePopulation(version_endcodage,population = [], optimizer = None,input
         for i,individual in enumerate(population):
             print("Evaluation individu: ",i)
             
-            debut = time.time()
-            train_acc, test_loss, fitness = Fitness(version_endcodage,optimizer=optimizer, individual = individual,input_shape=input_shape,
-                                    train_set=train_set,test_set=test_set,nb_epochs=nb_epochs,batch_size=batch_size)
-            #evaluated_population[tuple(individual)] = fitness
-            fin = time.time()
-            time_ = fin-debut
+            train_acc, fitness, time_, exist = CheckInMemorie(memorie_path,individual)
+            
+            if not exist:
+
+                debut = time.time()
+                train_acc, test_loss, fitness = Fitness(version_endcodage,optimizer=optimizer, individual = individual,input_shape=input_shape,
+                                        train_set=train_set,test_set=test_set,nb_epochs=nb_epochs,batch_size=batch_size)
+                #evaluated_population[tuple(individual)] = fitness
+                fin = time.time()
+                time_ = fin-debut
+                AddToMemorie(memorie_path, individual,train_acc,fitness, time_)
+
             data = {"train accuracy":round(train_acc,4),"test accuracy":round(fitness,4),"time":round(time_,2)}
             WriteOnCSV(file_path2,data)
 
@@ -98,8 +105,55 @@ def EvaluatePopulation(version_endcodage,population = [], optimizer = None,input
             print(f"Train accuracy:{round(train_acc,4)} Test accuracy:{round(fitness,4)} temp: {round(time_,2)}")
     return evaluation
 
+
+
+
 def WriteOnCSV(file_path, data):
     file = open(file_path, "a",newline='')
     writer = csv.DictWriter(file, fieldnames=list(data.keys()))
     writer.writerow(data)
     file.close()
+
+def AddToMemorie(file_path, individual, train_acc,fitness,time):
+    try:
+        with open(file_path, 'r') as file:
+            data = json.load(file)
+
+        newkey =  f"individual{len(data)+1}"
+
+        data[newkey] = {
+            "individual": individual,
+            "train_acc":train_acc,
+            "fitness":fitness,
+            "time":time
+        }
+
+        with open(file_path,"w") as file:
+            json.dump(data,file)
+    except(json.decoder.JSONDecodeError):
+        
+        data = {"individual1": {
+            "individual": individual,
+            "train_acc":train_acc,
+            "fitness":fitness,
+            "time":time
+        }}
+
+        with open(file_path,"w") as file:
+            json.dump(data,file)
+
+def CheckInMemorie(file_path:str, individu):
+    
+    try:
+        with open(file_path, 'r') as file:
+            data = json.load(file)
+
+        for list in data:
+            if data[list]["individual"] == individu:
+                print("Trouvé", individu)
+                return data[list]["train_acc"], data[list]["fitness"],data[list]["time"], True
+    
+    except (FileNotFoundError, json.decoder.JSONDecodeError):
+        return 0,0,0,False 
+     
+    return 0,0,0, False

@@ -1,6 +1,6 @@
 from geneticalgorithme import *
 from selection import SelectBestSolution
-from data import LeodDataBase
+from data import LaodDataBase
 import datetime
 from keras.optimizers import SGD, Adam
 import os
@@ -22,8 +22,8 @@ if __name__ == "__main__":
     VERSION_ENCODAGE = "dynamic"
     LEARNING_RATE = 0.02
     
-    TrainSetPath = sys.argv[1]
-    TestSetPath = sys.argv[2]
+    #TrainSetPath = sys.argv[1]
+    #TestSetPath = sys.argv[2]
     
 
     date = datetime.datetime.now()
@@ -31,6 +31,7 @@ if __name__ == "__main__":
 
     FILE_NAME1 = f"Tests/file_{date}.txt"
     FILE_NAME2 = f"Tests/file_{date}.csv"
+    MEMORIE_PATH = "Tests/memorie.json"
 
     f = open(FILE_NAME1,"w")
     f.write(f"NB_OF_GENERATION = {NB_OF_GENERATION}\nPOPULATION_SIZE = {POPULATION_SIZE}\nINPUT_SHAPE "+
@@ -48,9 +49,11 @@ if __name__ == "__main__":
         csv_file.close()
 
 
-    TrainSet, TestSet = LeodDataBase(TrainSetPath,TestSetPath)
+    TrainSet, TestSet = [],[]# LaodDataBase(TrainSetPath,TestSetPath)
 
     optimizer = SGD(LEARNING_RATE)
-    best_solution = GeneticAlgorithme(VERSION_ENCODAGE,POPULATION_SIZE,NB_OF_GENERATION,NB_PARENTS,ELITE_FRAC,CHILDREN_FRAC,optimizer,
-                    INPUT_SHAPE,[TrainSet],[TestSet],NB_EPOCHS,BATCH_SIZE, FILE_NAME1,FILE_NAME2,PROBA_CROSSOVER,PROBA_MUTATION)
+    best_solution = GeneticAlgorithme(VERSION_ENCODAGE,POPULATION_SIZE,NB_OF_GENERATION,NB_PARENTS,
+                                      ELITE_FRAC,CHILDREN_FRAC,optimizer,INPUT_SHAPE,[TrainSet],
+                                      [TestSet],NB_EPOCHS,BATCH_SIZE, FILE_NAME1,FILE_NAME2,
+                                      MEMORIE_PATH,PROBA_CROSSOVER,PROBA_MUTATION)
     print("Best Solution: ",best_solution)

@@ -8,13 +8,13 @@ import copy
 
 def GeneticAlgorithme(version_encodage,population_size, nb_generation,nb_parents,elite_frac,
                       children_frac,optimizer,input_shape, train_set, test_set, 
-                      nb_epochs,batch_size, file_path1,file_path2, proba_crossover,proba_mutation ):
+                      nb_epochs,batch_size, file_path1,file_path2, memorie_path,proba_crossover,proba_mutation ):
     best_in_generation = []
     #initalise la population aleatoirement
     population = InitPopulation(population_size,version_encodage)
     
     population_evaluated = EvaluatePopulation(version_encodage,population=population,optimizer=optimizer,input_shape=input_shape, train_set=train_set,test_set= test_set, 
-                                        nb_epochs=nb_epochs,batch_size=batch_size, file_path1=file_path1,file_path2=file_path2)
+                                        nb_epochs=nb_epochs,batch_size=batch_size, file_path1=file_path1,file_path2=file_path2,memorie_path=memorie_path)
     best_in_generation.append(SelectBestSolution(population_evaluated))
 
     for i in range(nb_generation):
@@ -53,7 +53,7 @@ def GeneticAlgorithme(version_encodage,population_size, nb_generation,nb_parents
         
         #Evaluer la population
         population_evaluated = EvaluatePopulation(version_encodage,population=population,optimizer=optimizer,input_shape=input_shape, train_set=train_set,test_set= test_set, 
-                                        nb_epochs=nb_epochs,batch_size=batch_size, file_path1=file_path1,file_path2=file_path2)
+                                        nb_epochs=nb_epochs,batch_size=batch_size, file_path1=file_path1,file_path2=file_path2,memorie_path=memorie_path)
         best_in_generation.append(SelectBestSolution(population_evaluated))
     
     #Selectionner la meilleur solution attiente
