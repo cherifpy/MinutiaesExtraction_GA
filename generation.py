@@ -61,10 +61,10 @@ def Fitness(version_encodage,individual,optimizer=None,input_shape=(),
         model = CreateModel1(optimizer=optimizer,input_shape=input_shape,
                              nb_classe=nb_classe,individual=individual,version=version_encodage)
         history = model.fit(x = train_set[0], batch_size=batch_size, epochs=nb_epochs,verbose=0)
-        # validation_split=validation_split,
+        
         train_acc = max(history.history['accuracy'])
         test_loss, test_acc = model.evaluate(test_set[0], steps=len(test_set[0]))
-        #print(f"test loss:{test_loss}, test accuracy:{test_acc}")
+        
     except:
         return 0,0,0
     
@@ -96,7 +96,7 @@ def EvaluatePopulation(version_endcodage,population = [], optimizer = None,input
             data = {"train accuracy":round(train_acc,4),"test accuracy":round(fitness,4),"time":round(time_,2)}
             WriteOnCSV(paths["CSVFile"],data)
             
-            AddToResults(paths["ResultsFile"],i,individual,fitness,train_acc,time_,time_/nb_epochs)
+            AddToResults(paths["ResultsFile"],i,individual,round(fitness,4),round(train_acc,4),round(time_,4),round(time_/nb_epochs,4))
 
             evaluation.append((copy.deepcopy(individual),fitness))
 
