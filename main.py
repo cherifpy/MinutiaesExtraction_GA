@@ -29,11 +29,15 @@ if __name__ == "__main__":
     date = datetime.datetime.now()
     date = date.strftime("%m_%d_%H_%M_%S")
 
-    FILE_NAME1 = f"Tests/file_{date}.txt"
-    FILE_NAME2 = f"Tests/file_{date}.csv"
-    MEMORIE_PATH = "Tests/memorie.json"
 
-    f = open(FILE_NAME1,"w")
+    PATHS = {
+        "TextFile":f"Tests/file_{date}.txt",
+        "CSVFile":f"Tests/file_{date}.csv",
+        "MemorieFile":"Tests/memorie.json",
+        "ResultFile":"Tests/results.json"
+    }
+
+    f = open(PATHS["TextFile"],"w")
     f.write(f"NB_OF_GENERATION = {NB_OF_GENERATION}\nPOPULATION_SIZE = {POPULATION_SIZE}\nINPUT_SHAPE "+
             f"= {INPUT_SHAPE}\nBATCH_SIZE = {BATCH_SIZE}\nNB_EPOCHS = {NB_EPOCHS}\nELITE_FRAC = {ELITE_FRAC}\nCHILDREN_FRAC = "+
            f"{CHILDREN_FRAC}\nTEST_SIZE = {TEST_SIZE}\nPROBA_MUTATION = {PROBA_MUTATION}\n"+
@@ -41,9 +45,9 @@ if __name__ == "__main__":
 
     f.close()
 
-    if not os.path.isfile(FILE_NAME2):
+    if not os.path.isfile(PATHS["CSVFile"]):
         columns = ["train accuracy", "test accuracy", "time"]
-        csv_file = open(FILE_NAME2, 'w',newline='')
+        csv_file = open(PATHS["CSVFile"], 'w',newline='')
         writer = csv.DictWriter(csv_file,fieldnames=columns)
         writer.writeheader()
         csv_file.close()
@@ -54,6 +58,5 @@ if __name__ == "__main__":
     optimizer = SGD(LEARNING_RATE)
     best_solution = GeneticAlgorithme(VERSION_ENCODAGE,POPULATION_SIZE,NB_OF_GENERATION,NB_PARENTS,
                                       ELITE_FRAC,CHILDREN_FRAC,optimizer,INPUT_SHAPE,[TrainSet],
-                                      [TestSet],NB_EPOCHS,BATCH_SIZE, FILE_NAME1,FILE_NAME2,
-                                      MEMORIE_PATH,PROBA_CROSSOVER,PROBA_MUTATION)
+                                      [TestSet],NB_EPOCHS,BATCH_SIZE,PROBA_CROSSOVER,PROBA_MUTATION,PATHS)
     print("Best Solution: ",best_solution)
