@@ -5,8 +5,8 @@ def CrossoverConv(parent1, parent2, proba_crossover = 0.7):
         Crossover applique sur la partie des couches convolution
             -  proba_crossover: la probabilité de faire un crossover
     """
-    parent_1 = parent1[:]
-    parent_2 = parent2[:]
+    parent_1 = copy.deepcopy(parent1)
+    parent_2 =copy.deepcopy(parent2)
     if random.random() < proba_crossover:
         child_1,child_2 = [],[]
         min_length = min(len(parent_1[0]),len(parent_2[0]))
@@ -18,7 +18,7 @@ def CrossoverConv(parent1, parent2, proba_crossover = 0.7):
         child_1.append(parent_1[1])
         child_2.append(parent_2[1])
 
-        return child_1,child_2
+        return copy.deepcopy(child_1),copy.deepcopy(child_2)
     else:
         return parent_1, parent_2
 

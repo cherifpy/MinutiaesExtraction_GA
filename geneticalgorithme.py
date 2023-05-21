@@ -7,13 +7,13 @@ import copy
 
 
 def GeneticAlgorithme(version_encodage,population_size, nb_generation,nb_parents,elite_frac,
-                      children_frac,optimizer,input_shape, train_set, test_set, 
+                      children_frac,optimizer,input_shape,DataBase, 
                       nb_epochs,batch_size,proba_crossover,proba_mutation,paths ):
     best_in_generation = []
     #initalise la population aleatoirement
     population = InitPopulation(population_size,version_encodage)
     
-    population_evaluated = EvaluatePopulation(version_encodage,population=population,optimizer=optimizer,input_shape=input_shape, train_set=train_set,test_set= test_set, 
+    population_evaluated = EvaluatePopulation(version_encodage,population=population,optimizer=optimizer,input_shape=input_shape,DataBase=DataBase, 
                                         nb_epochs=nb_epochs,batch_size=batch_size, paths=paths)
     best_in_generation.append(SelectBestSolution(population_evaluated))
 
@@ -24,12 +24,7 @@ def GeneticAlgorithme(version_encodage,population_size, nb_generation,nb_parents
         f.close()
 
         print("Debut generation: ",i)
-        #Evaluer la population
-        """
-        population_evaluated = EvaluatePopulation(population=population,optimizer=optimizer,input_shape=input_shape, train_set=train_set,test_set= test_set, 
-                                        nb_epochs=nb_epochs,batch_size=batch_size, file_path1=file_path1,file_path2=file_path2)
-        """
-        
+
         parents = BestRankedSelection(nb_parents,population_evaluated)
         
         #Appliquer le crossover pour cree de nouveau enfants
@@ -52,7 +47,7 @@ def GeneticAlgorithme(version_encodage,population_size, nb_generation,nb_parents
         
         
         #Evaluer la population
-        population_evaluated = EvaluatePopulation(version_encodage,population=population,optimizer=optimizer,input_shape=input_shape, train_set=train_set,test_set= test_set, 
+        population_evaluated = EvaluatePopulation(version_encodage,population=population,optimizer=optimizer,input_shape=input_shape, DataBase=DataBase, 
                                         nb_epochs=nb_epochs,batch_size=batch_size, paths=paths)
         best_in_generation.append(SelectBestSolution(population_evaluated))
     

@@ -19,10 +19,10 @@ if __name__ == "__main__":
     TEST_SIZE = 0.4
     PROBA_MUTATION = 0.7
     PROBA_CROSSOVER = 0.7
-    VERSION_ENCODAGE = "dynamic"
+    VERSION_ENCODAGE = "static"
     LEARNING_RATE = 0.02
     
-    TrainSetPath = sys.argv[1]
+    TrainSetPath =  sys.argv[1]
     TestSetPath = sys.argv[2]
     
 
@@ -34,7 +34,7 @@ if __name__ == "__main__":
         "TextFile":f"Tests/file_{date}.txt",
         "CSVFile":f"Tests/file_{date}.csv",
         "MemorieFile":"Tests/memorie.json",
-        "ResultFile":"Tests/results.json"
+        "ResultsFile":"Tests/results.json"
     }
 
     f = open(PATHS["TextFile"],"w")
@@ -55,8 +55,8 @@ if __name__ == "__main__":
 
     TrainSet, TestSet = LoadDataBase(TrainSetPath,TestSetPath)
 
+    Database = [[TrainSet],[TestSet]]
     optimizer = SGD(LEARNING_RATE)
     best_solution = GeneticAlgorithme(VERSION_ENCODAGE,POPULATION_SIZE,NB_OF_GENERATION,NB_PARENTS,
-                                      ELITE_FRAC,CHILDREN_FRAC,optimizer,INPUT_SHAPE,[TrainSet],
-                                      [TestSet],NB_EPOCHS,BATCH_SIZE,PROBA_CROSSOVER,PROBA_MUTATION,PATHS)
+                                      ELITE_FRAC,CHILDREN_FRAC,optimizer,INPUT_SHAPE,Database,NB_EPOCHS,BATCH_SIZE,PROBA_CROSSOVER,PROBA_MUTATION,PATHS)
     print("Best Solution: ",best_solution)

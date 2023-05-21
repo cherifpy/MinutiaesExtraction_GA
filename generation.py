@@ -72,11 +72,11 @@ def Fitness(version_encodage,individual,optimizer=None,input_shape=(),
     return train_acc,test_loss,test_acc
 
 def EvaluatePopulation(version_endcodage,population = [], optimizer = None,input_shape=(),
-                        train_set = [], test_set=[], nb_epochs = 15,
+                        DataBase=[], nb_epochs = 15,
                         batch_size = 50,paths:dict = None):
 
     evaluation = []
-    if len(train_set) != 0: 
+    if len(DataBase[0]) != 0: 
         
         for i,individual in enumerate(population):
             print("Evaluation individu: ",i)
@@ -87,7 +87,7 @@ def EvaluatePopulation(version_endcodage,population = [], optimizer = None,input
 
                 debut = time.time()
                 train_acc, test_loss, fitness = Fitness(version_endcodage,optimizer=optimizer, individual = individual,input_shape=input_shape,
-                                        train_set=train_set,test_set=test_set,nb_epochs=nb_epochs,batch_size=batch_size)
+                                        train_set=DataBase[0],test_set=DataBase[1],nb_epochs=nb_epochs,batch_size=batch_size)
                 #evaluated_population[tuple(individual)] = fitness
                 fin = time.time()
                 time_ = fin-debut

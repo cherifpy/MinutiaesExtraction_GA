@@ -16,15 +16,16 @@ def AddConvLayer(child,i=0,version="dynamic"):
             rand_pos = random.randint(0,len(individual[0]))
 
             individual[0].insert(rand_pos,layer)
-            layer = []
+            
     else:
+
         layer.append(random.choice(nb_filters_valeus))
         layer.append(random.choice(filter_size_valeus))
         layer.append(random.choice(polling_size_valeus))
         layer.append(random.choice([0,1]))
 
-        individual[0][i] = layer
-        layer = []
+        individual[0][i] =copy.deepcopy(layer)
+        
     return copy.deepcopy(individual)
   
 
@@ -158,27 +159,32 @@ def Mutation(child, proba_mutation=1, version="dynamic"):
         if count2<= min(nb_dense_layer_valeus): del_layer_dense = False
             
 
-        for i, layer in enumerate(individual[0]):
-            if random.random() < proba_mutation:
+        rand_layer = random.randrange(0,max(nb_bloc_conv_valeus))
 
-                if layer != []: 
-                    r = random.choice([1,2])
-                    if r == 1 : individual = AlterConvLayer(individual, i,version=version)[:]
-                    elif del_layer_conv : individual = DelConvLayer(individual,i,version=version)[:]
-                    else : individual = AlterConvLayer(individual, i,version=version)[:]
-
-                else : individual = AddConvLayer(individual,i,version=version)[:]
+        if individual[0][rand_layer]!=[] and del_layer_conv == True:
             
-        for i, layer in enumerate(individual[1]):
-            if random.random() < proba_mutation:
+            rand_operation = random.choice([1,2])
+            if rand_operation == 0: individual = AlterConvLayer(individual, rand_layer,version=version)[:]
+            else: individual = DelConvLayer(individual,rand_layer,version=version)[:]
 
-                if layer != []: 
-                    r = random.choice([1,2])
-                    if r == 1 : individual = AlterDenseLayer(individual, i,version=version)[:]
-                    elif del_layer_dense : individual = DelDenseLayer(individual,i,version=version)[:]
-                    else : individual = AlterDenseLayer(individual, i,version=version)[:]
+        elif individual[0][rand_layer] != [] and del_layer_conv == False:
+            individual = AlterConvLayer(individual, rand_layer,version=version)[:]
 
-                else: individual = AddDenseLayer(individual,i,version=version)[:]
+        else :
+            individual = AddConvLayer(individual, rand_layer,version=version)[:]
+
+        rand_layer = random.randrange(0,max(nb_dense_layer_valeus))
+
+        if individual[1][rand_layer]!=[] and del_layer_dense== True:
+            
+            rand_operation = random.choice([1,2])
+            if rand_operation == 0: individual = AlterDenseLayer(individual, rand_layer,version=version)[:]
+            else: individual = DelDenseLayer(individual,rand_layer,version=version)[:]
+
+        elif individual[1][rand_layer] != [] and del_layer_dense == False:
+            individual = AlterDenseLayer(individual, rand_layer,version=version)[:]
+        else :  individual = AddConvLayer(individual, rand_layer,version=version)[:]     
+        
     else:
         print("Erreur de version")
     return copy.deepcopy(individual)
