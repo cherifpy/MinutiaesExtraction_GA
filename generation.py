@@ -56,7 +56,6 @@ def Fitness(version_encodage,individual,optimizer=None,input_shape=(),
                      nb_classe=2,train_set = [],
                      test_set=[],nb_epochs = 4, 
                      batch_size = 100,validation_split = 0.2):
-    
     try:
         
         model = CreateModel1(optimizer=optimizer,input_shape=input_shape,
@@ -70,7 +69,7 @@ def Fitness(version_encodage,individual,optimizer=None,input_shape=(),
         return 0,0,0
     
     
-    return random.random(),random.random(),random.random()#train_acc,test_loss,test_acc
+    return train_acc,test_loss,test_acc
 
 def EvaluatePopulation(version_endcodage,population = [], optimizer = None,input_shape=(),
                         train_set = [], test_set=[], nb_epochs = 15,

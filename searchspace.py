@@ -1,5 +1,5 @@
 
-nb_bloc_conv_valeus = [2,3,4,5,6]
+nb_bloc_conv_valeus = [3,4,5,6]
 nb_filters_valeus = [32,64,128,256] #[10,20,30,40]
 filter_size_valeus = [3,5,7,9]
 nb_dense_layer_valeus = [1,2,3]

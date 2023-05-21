@@ -1,9 +1,10 @@
 from keras.preprocessing.image import ImageDataGenerator
-import cv2 as cv
 import pandas as pd
-from sklearn.model_selection import train_test_split
 
-def LaodDataBase(TrainingPath:str, TestPath:str,batchsize=150):
+#from sklearn.model_selection import train_test_split
+#import cv2 as cv
+
+def LoadDataBase(TrainingPath:str, TestPath:str,batchsize=150):
 
     train_datagen = ImageDataGenerator(
         rescale=1./255,
@@ -32,6 +33,8 @@ def LaodDataBase(TrainingPath:str, TestPath:str,batchsize=150):
     
     return training_set,test_set
 
+
+"""
 def LoadDataBase2(DataSet_Path:str,Images_Path:str, TestSplit=0.3):
   
   TrainSet_X, TestSet_X= [],[],[],[],
@@ -56,3 +59,4 @@ def LoadDataBase2(DataSet_Path:str,Images_Path:str, TestSplit=0.3):
   
 
   return TrainSet_X,TestSet_X,TrainSet_Y, TestSet_Y
+"""

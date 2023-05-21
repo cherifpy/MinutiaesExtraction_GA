@@ -118,6 +118,9 @@ def AlterDenseLayer(child,i=0,version="dynamic"):
 
 def Mutation(child, proba_mutation=1, version="dynamic"):
     
+    if random.random() > proba_mutation:
+        return copy.deepcopy(child)
+
     individual = copy.deepcopy(child)
     
     if version == "dynamic":

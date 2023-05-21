@@ -6,7 +6,7 @@
 #SBATCH --gres=gpu:2
 
 #Max wallTime for the job
-#SBATCH -t 24:00:00
+#SBATCH -t 30:00:00
 
 
 #Resource requiremenmt commands end here

@@ -1,6 +1,6 @@
 from geneticalgorithme import *
 from selection import SelectBestSolution
-from data import LaodDataBase
+from data import LoadDataBase
 import datetime
 from keras.optimizers import SGD, Adam
 import os
@@ -49,7 +49,7 @@ if __name__ == "__main__":
         csv_file.close()
 
 
-    TrainSet, TestSet = LaodDataBase(TrainSetPath,TestSetPath)
+    TrainSet, TestSet = LoadDataBase(TrainSetPath,TestSetPath)
 
     optimizer = SGD(LEARNING_RATE)
     best_solution = GeneticAlgorithme(VERSION_ENCODAGE,POPULATION_SIZE,NB_OF_GENERATION,NB_PARENTS,
