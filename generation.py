@@ -62,7 +62,7 @@ def Fitness(version_encodage,individual,optimizer=None,input_shape=(),
                              nb_classe=nb_classe,individual=individual,version=version_encodage)
         history = model.fit(x = train_set[0], batch_size=batch_size, epochs=nb_epochs,verbose=0)
         # validation_split=validation_split,
-        train_acc = history.history['accuracy'][-1]
+        train_acc = max(history.history['accuracy'])
         test_loss, test_acc = model.evaluate(test_set[0], steps=len(test_set[0]))
         #print(f"test loss:{test_loss}, test accuracy:{test_acc}")
     except:
@@ -73,7 +73,7 @@ def Fitness(version_encodage,individual,optimizer=None,input_shape=(),
 
 def EvaluatePopulation(version_endcodage,population = [], optimizer = None,input_shape=(),
                         train_set = [], test_set=[], nb_epochs = 15,
-                        batch_size = 50,file_path1=None,file_path2=None,memorie_path=None):
+                        batch_size = 50,paths:dict = None):
 
     evaluation = []
     if len(train_set) != 0: 
@@ -81,7 +81,7 @@ def EvaluatePopulation(version_endcodage,population = [], optimizer = None,input
         for i,individual in enumerate(population):
             print("Evaluation individu: ",i)
             
-            train_acc, fitness, time_, exist = CheckInMemorie(memorie_path,individual)
+            train_acc, fitness, time_, exist = CheckInMemorie(paths["MemorieFile"],individual)
             
             if not exist:
 
@@ -91,14 +91,16 @@ def EvaluatePopulation(version_endcodage,population = [], optimizer = None,input
                 #evaluated_population[tuple(individual)] = fitness
                 fin = time.time()
                 time_ = fin-debut
-                AddToMemorie(memorie_path, individual,train_acc,fitness, time_)
+                AddToMemorie(paths["MemorieFile"], individual,train_acc,fitness, time_)
 
             data = {"train accuracy":round(train_acc,4),"test accuracy":round(fitness,4),"time":round(time_,2)}
-            WriteOnCSV(file_path2,data)
+            WriteOnCSV(paths["CSVFile"],data)
+            
+            AddToResults(paths["ResultsFile"],i,individual,fitness,train_acc,time_,time_/nb_epochs)
 
             evaluation.append((copy.deepcopy(individual),fitness))
 
-            with open(file_path1,"a") as f:
+            with open(paths["TextFile"],"a") as f:
                 f.write(f"{individual}\n")
             f.close()
             print(f"Train accuracy:{round(train_acc,4)} Test accuracy:{round(fitness,4)} temp: {round(time_,2)}")
@@ -156,3 +158,36 @@ def CheckInMemorie(file_path:str, individu):
         return 0,0,0,False 
      
     return 0,0,0, False
+
+
+def AddToResults(file_path:str,nb_gener, individual, fitness,train_acc, time, time_per_epoch):
+    try:
+        with open(file_path, 'r') as file:
+            data = json.load(file)
+
+        newkey =  f"individual{len(data)+1}"
+
+        data[newkey] = {
+            "individual": individual,
+            "generation":nb_gener,
+            "train_acc":train_acc,
+            "fitness":fitness,
+            "time":time,
+            "time_per_epoch": time_per_epoch 
+        }
+
+        with open(file_path,"w") as file:
+            json.dump(data,file)
+    except(json.decoder.JSONDecodeError):
+        
+        data = {"individual1": {
+            "individual": individual,
+            "generation":nb_gener,
+            "train_acc":train_acc,
+            "fitness":fitness,
+            "time":time,
+            "time_per_epoch": time_per_epoch 
+        }}
+
+    with open(file_path,"w") as file:
+        json.dump(data,file)
