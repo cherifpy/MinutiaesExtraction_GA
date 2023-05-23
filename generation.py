@@ -1,6 +1,6 @@
 import random
 from models import *
-from searchspace import *
+from parametres import *
 import time
 import csv
 import copy
@@ -61,13 +61,9 @@ def Fitness(version_encodage,individual,optimizer=None,input_shape=(),
         model = CreateModel1(optimizer=optimizer,input_shape=input_shape,
                              nb_classe=nb_classe,individual=individual,version=version_encodage)
         history = model.fit(x = train_set[0], batch_size=batch_size, epochs=nb_epochs,verbose=0)
-<<<<<<< HEAD
+
         # validation_split=validation_split,
         train_acc = history.history['accuracy'][-1]
-=======
-        
-        train_acc = max(history.history['accuracy'])
->>>>>>> 32d8c2321ba570bb5c8f8897f632770a5fc72cac
         test_loss, test_acc = model.evaluate(test_set[0], steps=len(test_set[0]))
         
     except:

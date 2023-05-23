@@ -88,7 +88,7 @@ def CreateModel2(optimizer=None,input_shape=(),nb_features=2, individual=[],
             my_model.add(Dense(layer[0]))
             if layer[1] == 1:  my_model.add(Activation(relu))
 
-    elif version=="statique":
+    elif version=="static":
         for i,layer in enumerate(conv_layers):
             if layer != []:
                 my_model.add(Conv2D(layer[0], layer[1], name=f'conv{i}',padding="same")) #Add conv parameters

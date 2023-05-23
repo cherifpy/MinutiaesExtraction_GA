@@ -1,26 +1,16 @@
 from geneticalgorithme import *
 from selection import SelectBestSolution
+from parametres import *
 from data import LoadDataBase
 import datetime
 from keras.optimizers import SGD, Adam
 import os
 import sys
 
+
 if __name__ == "__main__":
 
-    NB_OF_GENERATION = 15
-    POPULATION_SIZE = 24
-    NB_PARENTS = 15
-    INPUT_SHAPE =(32,32,1)
-    BATCH_SIZE = 200
-    NB_EPOCHS = 15
-    ELITE_FRAC = 0.5
-    CHILDREN_FRAC = 0.5
-    TEST_SIZE = 0.4
-    PROBA_MUTATION = 0.7
-    PROBA_CROSSOVER = 0.7
-    VERSION_ENCODAGE = "static"
-    LEARNING_RATE = 0.02
+
     
     TrainSetPath =  sys.argv[1]
     TestSetPath = sys.argv[2]
@@ -53,13 +43,12 @@ if __name__ == "__main__":
         csv_file.close()
 
 
-    TrainSet, TestSet = [],[]#LoadDataBase(TrainSetPath,TestSetPath)
+    TrainSet, TestSet = LoadDataBase(TrainSetPath,TestSetPath)
 
     Database = [[TrainSet],[TestSet]]
     optimizer = SGD(LEARNING_RATE)
     best_solution = GeneticAlgorithme(VERSION_ENCODAGE,POPULATION_SIZE,NB_OF_GENERATION,NB_PARENTS,
                                       ELITE_FRAC,CHILDREN_FRAC,optimizer,INPUT_SHAPE,Database,NB_EPOCHS,BATCH_SIZE,PROBA_CROSSOVER,PROBA_MUTATION,PATHS)
-<<<<<<< HEAD
     
     
     with open(PATHS["TextFile"],'a') as file:
@@ -68,6 +57,3 @@ if __name__ == "__main__":
             file.write(x)
     
     file.close()
-=======
-    print("Best Solution: ",best_solution)
->>>>>>> 32d8c2321ba570bb5c8f8897f632770a5fc72cac
