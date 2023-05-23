@@ -62,9 +62,9 @@ def Fitness(version_encodage,individual,optimizer=None,input_shape=(),
                              nb_classe=nb_classe,individual=individual,version=version_encodage)
         history = model.fit(x = train_set[0], batch_size=batch_size, epochs=nb_epochs,verbose=0)
         # validation_split=validation_split,
-        train_acc = max(history.history['accuracy'])
+        train_acc = history.history['accuracy'][-1]
         test_loss, test_acc = model.evaluate(test_set[0], steps=len(test_set[0]))
-        #print(f"test loss:{test_loss}, test accuracy:{test_acc}")
+        
     except:
         return 0,0,0
     
@@ -103,7 +103,7 @@ def EvaluatePopulation(version_endcodage,population = [], optimizer = None,input
             with open(paths["TextFile"],"a") as f:
                 f.write(f"{individual}\n")
             f.close()
-            print(f"Train accuracy:{round(train_acc,4)} Test accuracy:{round(fitness,4)} temp: {round(time_,2)}")
+    
     return evaluation
 
 
@@ -151,7 +151,6 @@ def CheckInMemorie(file_path:str, individu):
 
         for list in data:
             if data[list]["individual"] == individu:
-                print("Trouvé", individu)
                 return data[list]["train_acc"], data[list]["fitness"],data[list]["time"], True
     
     except (FileNotFoundError, json.decoder.JSONDecodeError):

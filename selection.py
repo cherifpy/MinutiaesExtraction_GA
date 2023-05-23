@@ -11,9 +11,9 @@ def SelectNextGeneration(population = [],children=[],generation_size=10, elite_f
 
     next_generation = []
     next_generation +=  [copy.deepcopy(indiv[0]) for indiv in population_sorted[0:nb_population]]
-    print("selected individus:")
+    """print("selected individus:")
     for indi in next_generation:
-        print(indi)
+        print(indi)"""
     next_generation += copy.deepcopy(list(random.sample(children,nb_children)))
 
     if (nb_population+nb_children) < generation_size :

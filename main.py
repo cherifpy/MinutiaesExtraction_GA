@@ -9,17 +9,17 @@ import sys
 if __name__ == "__main__":
 
     NB_OF_GENERATION = 15
-    POPULATION_SIZE = 20
+    POPULATION_SIZE = 24
     NB_PARENTS = 15
     INPUT_SHAPE =(32,32,1)
-    BATCH_SIZE = 150
+    BATCH_SIZE = 200
     NB_EPOCHS = 15
     ELITE_FRAC = 0.5
     CHILDREN_FRAC = 0.5
     TEST_SIZE = 0.4
     PROBA_MUTATION = 0.7
     PROBA_CROSSOVER = 0.7
-    VERSION_ENCODAGE = "static"
+    VERSION_ENCODAGE = "dynamic"
     LEARNING_RATE = 0.02
     
     TrainSetPath =  sys.argv[1]
@@ -53,10 +53,17 @@ if __name__ == "__main__":
         csv_file.close()
 
 
-    TrainSet, TestSet = LoadDataBase(TrainSetPath,TestSetPath)
+    TrainSet, TestSet = [],[]#LoadDataBase(TrainSetPath,TestSetPath)
 
     Database = [[TrainSet],[TestSet]]
     optimizer = SGD(LEARNING_RATE)
     best_solution = GeneticAlgorithme(VERSION_ENCODAGE,POPULATION_SIZE,NB_OF_GENERATION,NB_PARENTS,
                                       ELITE_FRAC,CHILDREN_FRAC,optimizer,INPUT_SHAPE,Database,NB_EPOCHS,BATCH_SIZE,PROBA_CROSSOVER,PROBA_MUTATION,PATHS)
-    print("Best Solution: ",best_solution)
+    
+    
+    with open(PATHS["TextFile"],'a') as file:
+        file.write("Best solutions in each generation:")
+        for x in best_solution:
+            file.write(x)
+    
+    file.close()

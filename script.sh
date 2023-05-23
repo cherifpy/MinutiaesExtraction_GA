@@ -17,7 +17,6 @@
 
 
 module purge 
-module load cuda gcc openmpi 
 
 source /share/apps/NYUAD/miniconda/3-4.11.0/bin/activate
 
