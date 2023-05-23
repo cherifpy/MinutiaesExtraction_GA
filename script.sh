@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#SBATCH -c 8
-
 #SBATCH -p nvidia
 #SBATCH --gres=gpu:2
 

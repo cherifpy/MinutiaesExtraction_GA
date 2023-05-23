@@ -19,7 +19,7 @@ if __name__ == "__main__":
     TEST_SIZE = 0.4
     PROBA_MUTATION = 0.7
     PROBA_CROSSOVER = 0.7
-    VERSION_ENCODAGE = "dynamic"
+    VERSION_ENCODAGE = "static"
     LEARNING_RATE = 0.02
     
     TrainSetPath =  sys.argv[1]
@@ -59,6 +59,7 @@ if __name__ == "__main__":
     optimizer = SGD(LEARNING_RATE)
     best_solution = GeneticAlgorithme(VERSION_ENCODAGE,POPULATION_SIZE,NB_OF_GENERATION,NB_PARENTS,
                                       ELITE_FRAC,CHILDREN_FRAC,optimizer,INPUT_SHAPE,Database,NB_EPOCHS,BATCH_SIZE,PROBA_CROSSOVER,PROBA_MUTATION,PATHS)
+<<<<<<< HEAD
     
     
     with open(PATHS["TextFile"],'a') as file:
@@ -67,3 +68,6 @@ if __name__ == "__main__":
             file.write(x)
     
     file.close()
+=======
+    print("Best Solution: ",best_solution)
+>>>>>>> 32d8c2321ba570bb5c8f8897f632770a5fc72cac
