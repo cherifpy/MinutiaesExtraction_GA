@@ -1,5 +1,5 @@
 import random
-from searchspace import *
+from parametres import *
 import copy
 def AddConvLayer(child,i=0,version="dynamic"):
     individual = copy.deepcopy(child)
