@@ -6,7 +6,7 @@ def AddConvLayer(child,i=0,version="dynamic"):
     layer = []
 
     if version == "dynamic":
-        if len(individual[1])<max(nb_bloc_conv_valeus):
+        if len(individual[0])<max(nb_bloc_conv_valeus):
         
             layer.append(random.choice(nb_filters_valeus))
             layer.append(random.choice(filter_size_valeus))

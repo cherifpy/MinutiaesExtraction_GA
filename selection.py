@@ -29,7 +29,9 @@ def SelectBestSolution(population = []):
     return sorted_population[-1]
 
 
-def BestRankedSelection(nb_parents, population:list):
+def BestRankedSelection(proba_parents, population:list):
+
+    nb_parents = len(population)*proba_parents
 
     population_sorted = sorted(population, key=lambda x: x[1],reverse=True)
     parents  = [parent[:] for parent in [indiv[0][:] for indiv in population_sorted]][0:nb_parents]

@@ -6,17 +6,13 @@ from crossover import *
 import copy
 
 
-def GeneticAlgorithme(version_encodage,population_size, nb_generation,nb_parents,elite_frac,
+def GeneticAlgorithme(version_encodage,population_size, nb_generation,proba_parents,elite_frac,
                       children_frac,optimizer,input_shape,DataBase, 
                       nb_epochs,batch_size,proba_crossover,proba_mutation,paths ):
     best_in_generation = []
     #initalise la population aleatoirement
     population = InitPopulation(population_size,version_encodage)
     
-    population_evaluated = EvaluatePopulation(version_encodage,population=population,optimizer=optimizer,input_shape=input_shape,DataBase=DataBase, 
-                                        nb_epochs=nb_epochs,batch_size=batch_size, paths=paths)
-    best_in_generation.append(SelectBestSolution(population_evaluated))
-
     for i in range(nb_generation):
     
         with open(paths["TextFile"], "a") as f:
@@ -24,8 +20,11 @@ def GeneticAlgorithme(version_encodage,population_size, nb_generation,nb_parents
         f.close()
 
         print("Debut generation: ",i)
-
-        parents = BestRankedSelection(nb_parents,population_evaluated)
+        population_evaluated = EvaluatePopulation(version_encodage,population=population,optimizer=optimizer,input_shape=input_shape,DataBase=DataBase, 
+                                        nb_epochs=nb_epochs,batch_size=batch_size, paths=paths)
+        best_in_generation.append(SelectBestSolution(population_evaluated))
+        
+        parents = BestRankedSelection(proba_parents,population_evaluated)
         
         #Appliquer le crossover pour cree de nouveau enfants
         new_children = []
@@ -45,12 +44,12 @@ def GeneticAlgorithme(version_encodage,population_size, nb_generation,nb_parents
         #selection la population de la future generation
         population = SelectNextGeneration(population_evaluated, children_after_mutation,population_size,elite_frac,children_frac)
         
-        
+        """        
         #Evaluer la population
         population_evaluated = EvaluatePopulation(version_encodage,population=population,optimizer=optimizer,input_shape=input_shape, DataBase=DataBase, 
                                         nb_epochs=nb_epochs,batch_size=batch_size, paths=paths)
         best_in_generation.append(SelectBestSolution(population_evaluated))
-    
+        """
     #Selectionner la meilleur solution attiente
     #best_in_generation = SelectBestSolution(population_evaluated, best_in_generation)
 

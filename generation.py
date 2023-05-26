@@ -155,7 +155,8 @@ def CheckInMemorie(file_path:str, individu):
                 return data[list]["train_acc"], data[list]["fitness"],data[list]["time"], True
     
     except (FileNotFoundError, json.decoder.JSONDecodeError):
-        return 0,0,0,False 
+        with open(file_path,'w') as file:
+            file.close()
      
     return 0,0,0, False
 

@@ -31,14 +31,15 @@ def CrossoverDense(parent1, parent2, proba_crossover=0.7):
     parent_2 =copy.deepcopy(parent2)
     if random.random() < proba_crossover:
         child_1,child_2 = [],[]
-        min_length = min(len(parent_1[0]),len(parent_2[0]))
-        random_point = random.randint(0,min_length)
-        child_1.append(parent_1[1][0:random_point]+parent_2[1][random_point:len(parent_2[0])])
-        child_2.append(parent_2[1][0:random_point]+parent_1[1][random_point:len(parent_1[0])])
         min_length = min(len(parent_1[1]),len(parent_2[1]))
         random_point = random.randint(0,min_length)
         child_1.append(parent_1[0])
         child_2.append(parent_2[0])
+        min_length = min(len(parent_1[0]),len(parent_2[0]))
+        random_point = random.randint(0,min_length)
+        child_1.append(parent_1[1][0:random_point]+parent_2[1][random_point:len(parent_2[0])])
+        child_2.append(parent_2[1][0:random_point]+parent_1[1][random_point:len(parent_1[0])])
+        
 
         return child_1,child_2
     else:

@@ -108,3 +108,28 @@ def CreateModel2(optimizer=None,input_shape=(),nb_features=2, individual=[],
     my_model.compile(loss=loss, optimizer=optimizer, metrics=[mertics])
 
     return my_model
+
+
+def Model45Net(optimizer=None,input_shape=(),loss='categorical_crossentropy',mertics="accuracy"):
+
+    model = Sequential(name="Model45Net")
+    model.add(Input(shape=input_shape))
+
+    model.add(Conv2D(kernel_size=6,filters=32))
+    model.add(MaxPool2D(pool_size=(2,2)))
+
+    model.add(Conv2D(kernel_size=5,filters=128))
+    model.add(MaxPool2D(pool_size=(2,2)))
+
+    model.add(Conv2D(kernel_size=3,filters=512))
+    model.add(MaxPool2D(pool_size=(2,2)))
+
+    model.add(Flatten())
+
+    model.add(Dense(1024))
+    model.add(Dense(128))
+    model.add(Dense(9))
+
+    model.compile(loss=loss, optimizer=optimizer, metrics=[mertics])
+
+    return model
