@@ -1,7 +1,7 @@
 from geneticalgorithme import *
 from selection import SelectBestSolution
 from parametres import *
-from data import LoadDataBase
+from data import *
 import datetime
 from keras.optimizers import SGD, Adam
 import os
@@ -10,10 +10,6 @@ import sys
 
 if __name__ == "__main__":
 
-
-    
-    TrainSetPath =  sys.argv[1]
-    TestSetPath = sys.argv[2]
     
 
     date = datetime.datetime.now()
@@ -24,7 +20,8 @@ if __name__ == "__main__":
         "TextFile":f"Tests/file_{date}.txt",
         "CSVFile":f"Tests/file_{date}.csv",
         "MemorieFile":"Tests/memorie.json",
-        "ResultsFile":"Tests/results.json"
+        "ResultsFile":"Tests/results.json",
+        "BestFile":"Tests/BestIndiv.json"
     }
 
     f = open(PATHS["TextFile"],"w")
@@ -43,17 +40,30 @@ if __name__ == "__main__":
         csv_file.close()
 
 
-    TrainSet, TestSet = LoadDataBase(TrainSetPath,TestSetPath)
+    
+    csv_file = "../../MMDB_FVC2_DB1A/Labels.csv"
+    image_path = "../../MMDB_FVC2_DB1A/Images"  
 
-    Database = [[TrainSet],[TestSet]]
+
+    #TrainSet_X,TestSet_X,TrainSet_Y, TestSet_Y = LoadDataBaseWithNormal(csv_file,image_path)
+
+    #Database = [[TrainSet_X,TrainSet_Y],[TestSet_X,TestSet_Y]]
+
+    Database = [[[]],[[]]]
     optimizer = SGD(LEARNING_RATE)
     best_solution = GeneticAlgorithme(VERSION_ENCODAGE,POPULATION_SIZE,NB_OF_GENERATION,PROBA_PARENTS,
                                       ELITE_FRAC,CHILDREN_FRAC,optimizer,INPUT_SHAPE,Database,NB_EPOCHS,BATCH_SIZE,PROBA_CROSSOVER,PROBA_MUTATION,PATHS)
     
     
-    with open(PATHS["TextFile"],'a') as file:
-        file.write("Best solutions in each generation:")
-        for x in best_solution:
-            file.write(x)
-    
+    data = {}
+    for indiv in best_solution:
+        newkey =  f"individual{len(data)+1}"
+
+        data[newkey] = {
+            "individual": indiv[0],
+            "fitness":indiv[1],
+        }
+
+    with open(PATHS["BestFile"],"w") as file:
+        json.dump(data,file)
     file.close()

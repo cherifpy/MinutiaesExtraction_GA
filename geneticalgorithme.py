@@ -21,7 +21,7 @@ def GeneticAlgorithme(version_encodage,population_size, nb_generation,proba_pare
 
         print("Debut generation: ",i)
         population_evaluated = EvaluatePopulation(version_encodage,population=population,optimizer=optimizer,input_shape=input_shape,DataBase=DataBase, 
-                                        nb_epochs=nb_epochs,batch_size=batch_size, paths=paths)
+                                        nb_epochs=nb_epochs,batch_size=batch_size, paths=paths,nb_generation=i)
         best_in_generation.append(SelectBestSolution(population_evaluated))
         
         parents = BestRankedSelection(proba_parents,population_evaluated)
@@ -31,7 +31,7 @@ def GeneticAlgorithme(version_encodage,population_size, nb_generation,proba_pare
         for parent_1, parent_2 in combinations(parents,2):
             
             #appliquer le crossover sur chaque 2 de parents
-            child_1,child_2 = CrossoverConv(parent_1,parent_2,proba_crossover)
+            child_1,child_2 = OnePointCrossoverConv(parent_1,parent_2,proba_crossover)
             new_children.append(child_1)
             new_children.append(child_2)
 

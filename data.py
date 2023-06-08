@@ -66,11 +66,12 @@ def LoadDataBase2(DataSet_Path:str,Images_Path:str, TestSplit=0.2):
 
     return TrainSet_X,TestSet_X,TrainSet_Y, TestSet_Y
 
-def LoadDataBase3(DataSet_Path:str,Images_Path:str, TestSplit=0.2):
+def LoadDataBaseWithNormal(DataSet_Path:str,Images_Path:str, TestSplit=0.2):
 
     TrainSet_X, TestSet_X= [],[]
 
     df = pd.read_csv(DataSet_Path)
+    df.columns = ["Images","classe", "TYPE", "Orientation"]
     Train, Test = train_test_split(df, test_size=TestSplit,shuffle=True)
 
 
@@ -82,13 +83,17 @@ def LoadDataBase3(DataSet_Path:str,Images_Path:str, TestSplit=0.2):
 
     
     for path in Train["Images"]:
-      img = cv.imread(Images_Path+"/"+path, cv.IMREAD_GRAYSCALE)
+      img = cv.imread(Images_Path+"/"+path)
+      img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+      img = img/255
       #img = np.reshape(img,(32,32,1))
 
       TrainSet_X.append(img)
 
     for path in Test["Images"]:
-      img = cv.imread(Images_Path+"/"+path, cv.IMREAD_GRAYSCALE)
+      img = cv.imread(Images_Path+"/"+path)
+      img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+      img = img/255
       #img = np.reshape(img,(32,32,1))
 
       TestSet_X.append(img)

@@ -5,7 +5,7 @@ import time
 import csv
 import copy
 import json
-
+from parametres import REGULARIZATION, NB_CLASSES
 def InitPopulation(population_size,version="dynamic"):
 
     population = []
@@ -56,25 +56,37 @@ def Fitness(version_encodage,individual,optimizer=None,input_shape=(),
                      nb_classe=2,train_set = [],
                      test_set=[],nb_epochs = 4, 
                      batch_size = 100,validation_split = 0.2):
-    try:
-        
-        model = CreateModel1(optimizer=optimizer,input_shape=input_shape,
-                             nb_classe=nb_classe,individual=individual,version=version_encodage)
-        history = model.fit(x = train_set[0], batch_size=batch_size, epochs=nb_epochs,verbose=0)
+    
+    """if len(train_set) == 1:
+        try:
+            model = ModelAvecregul(optimizer=optimizer,input_shape=input_shape,regularization=REGULARIZATION,
+                                nb_classe=nb_classe,individual=individual,version=version_encodage)
+            history = model.fit(x = train_set[0], batch_size=batch_size, epochs=nb_epochs,verbose=0)
 
-        # validation_split=validation_split,
-        train_acc = history.history['accuracy'][-1]
-        test_loss, test_acc = model.evaluate(test_set[0], steps=len(test_set[0]))
-        
-    except:
-        return 0,0,0
-    
-    
-    return train_acc,test_loss,test_acc
+            # validation_split=validation_split,
+            train_acc = history.history['accuracy'][-1]
+            test_loss, test_acc = model.evaluate(test_set[0], steps=len(test_set[0]))
+            
+        except:
+            return 0,0,0
+    else:
+        try:
+            model = ModelAvecregul(optimizer=optimizer,input_shape=input_shape,regularization=REGULARIZATION,
+                                nb_classe=nb_classe,individual=individual,version=version_encodage)
+            history = model.fit(x = train_set[0],y=train_set[1], batch_size=batch_size, epochs=nb_epochs,verbose=0)
+
+            # validation_split=validation_split,
+            train_acc = history.history['accuracy'][-1]
+            test_loss, test_acc = model.evaluate(x=test_set[0],y=test_set[1],steps=len(test_set[0]))
+            
+        except:
+            return 0,0,0
+    """
+    return random.random(),random.random(),random.random()#train_acc,test_loss,test_acc
 
 def EvaluatePopulation(version_endcodage,population = [], optimizer = None,input_shape=(),
                         DataBase=[], nb_epochs = 15,
-                        batch_size = 50,paths:dict = None):
+                        batch_size = 50,paths:dict = None,nb_generation = 0):
 
     evaluation = []
     if len(DataBase[0]) != 0: 
@@ -88,7 +100,7 @@ def EvaluatePopulation(version_endcodage,population = [], optimizer = None,input
 
                 debut = time.time()
                 train_acc, test_loss, fitness = Fitness(version_endcodage,optimizer=optimizer, individual = individual,input_shape=input_shape,
-                                        train_set=DataBase[0],test_set=DataBase[1],nb_epochs=nb_epochs,batch_size=batch_size)
+                                        train_set=DataBase[0],test_set=DataBase[1],nb_epochs=nb_epochs,batch_size=batch_size,nb_classe=NB_CLASSES)
                 #evaluated_population[tuple(individual)] = fitness
                 fin = time.time()
                 time_ = fin-debut
@@ -97,7 +109,7 @@ def EvaluatePopulation(version_endcodage,population = [], optimizer = None,input
             data = {"train accuracy":round(train_acc,4),"test accuracy":round(fitness,4),"time":round(time_,2)}
             WriteOnCSV(paths["CSVFile"],data)
             
-            AddToResults(paths["ResultsFile"],i,individual,round(fitness,4),round(train_acc,4),round(time_,4),round(time_/nb_epochs,4))
+            AddToResults(paths["ResultsFile"],nb_generation,individual,round(fitness,4),round(train_acc,4),round(time_,4),round(time_/nb_epochs,4))
 
             evaluation.append((copy.deepcopy(individual),fitness))
 

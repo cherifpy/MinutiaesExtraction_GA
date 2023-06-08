@@ -24,47 +24,50 @@ def SelectNextGeneration(population = [],children=[],generation_size=10, elite_f
 
     return next_generation
 
-def SelectBestSolution(population = []):
-    sorted_population = sorted(population, key=lambda x: x[1])
-    return sorted_population[-1]
-
 
 def BestRankedSelection(proba_parents, population:list):
-
-    nb_parents = len(population)*proba_parents
-
+    nb_parents = int(len(population)*proba_parents)
     population_sorted = sorted(population, key=lambda x: x[1],reverse=True)
     parents  = [parent[:] for parent in [indiv[0][:] for indiv in population_sorted]][0:nb_parents]
     
     return parents
 
-def rank_selection(population, num_parents):
-    fitness = [individual.fitness for individual in population]
-    rank = np.argsort(np.argsort(fitness))[::-1]
-    selected_parents = []
-    for i in range(num_parents):
-        rand = np.random.randint(0, sum(range(len(rank)))+1)
-        for j in range(len(rank)):
-            rand -= j
-            if rand < 0:
-                selected_parents.append(population[rank[j]])
-                break
-    return selected_parents
+def RouletteWheelSelection(population,  proba_parents):
+    nb_parents = int(len(population)*proba_parents)
+    fitness_values = [fit[1] for fit in population]
+    total_fitness = sum(fitness_values)
+    probabilities = [fitness / total_fitness for fitness in fitness_values]
+    selected = random.choices(population, weights=probabilities, k=nb_parents)
+    return selected
 
-def random_selection(population, nb_parents):
-    selected = []
-    parents = []
-    for i in range(nb_parents):
-        r = random.randint(0,len(population))
-        while r in selected:
-            r = random.randint(0,len(population))
-    
-        selected.append(r)
-        parents.append(list(population.keys())[r])
-  
+
+def RandomSelection(population, proba_parent):
+    nb_parents = int(len(population)*proba_parent)
+    parents = [copy.deepcopy(indiv[0]) for indiv in population]
+    selected = random.choices(parents,k=nb_parents)
     return parents
 
+
+def BestRankedSelectionV2(population, proba_selection):
+    nb_parents = int(len(population)*proba_selection)
+
+    population_sorted = sorted(population, key=lambda x: x[1],reverse=True)
+
+    parents  = [parent[:] for parent in [indiv[0][:] for indiv in population_sorted]]
+    ranks = list(range(1,len(parents)+1))
+    #Pi = Min+(Max-Min)(rang(i)-1)/(N-1).
+    probability = [rank/sum(ranks) for rank in ranks ]
+    
+    selected = random.choices(parents,weights=probability, k=nb_parents)
+    
+    return selected
 
 def SelectionAphaBeta(population,children, alpha, beta):
     
     pass
+
+
+def SelectBestSolution(population = []):
+
+    sorted_population = sorted(population, key=lambda x: x[1])
+    return sorted_population[-1]
