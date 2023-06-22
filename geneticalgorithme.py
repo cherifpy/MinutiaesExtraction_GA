@@ -31,7 +31,7 @@ def GeneticAlgorithme(version_encodage,population_size, nb_generation,proba_pare
         for parent_1, parent_2 in combinations(parents,2):
             
             #appliquer le crossover sur chaque 2 de parents
-            child_1,child_2 = OnePointCrossoverConv(parent_1,parent_2,proba_crossover)
+            child_1,child_2 = OnePointCrossover2Parties(parent_1,parent_2,proba_crossover)
             new_children.append(child_1)
             new_children.append(child_2)
 
