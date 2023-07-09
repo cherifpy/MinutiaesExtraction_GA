@@ -8,7 +8,7 @@ import copy
 
 def GeneticAlgorithme(version_encodage,population_size, nb_generation,proba_parents,elite_frac,
                       children_frac,optimizer,input_shape,DataBase, 
-                      nb_epochs,batch_size,proba_crossover,proba_mutation,paths ):
+                      nb_epochs,batch_size,proba_crossover,proba_mutation,paths,model):
     best_in_generation = []
     #initalise la population aleatoirement
     population = InitPopulation(population_size,version_encodage)
@@ -21,7 +21,7 @@ def GeneticAlgorithme(version_encodage,population_size, nb_generation,proba_pare
 
         print("Debut generation: ",i)
         population_evaluated = EvaluatePopulation(version_encodage,population=population,optimizer=optimizer,input_shape=input_shape,DataBase=DataBase, 
-                                        nb_epochs=nb_epochs,batch_size=batch_size, paths=paths,nb_generation=i)
+                                        nb_epochs=nb_epochs,batch_size=batch_size, paths=paths,nb_generation=i,model=model)
         best_in_generation.append(SelectBestSolution(population_evaluated))
         
         parents = BestRankedSelection(proba_parents,population_evaluated)

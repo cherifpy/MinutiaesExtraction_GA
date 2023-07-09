@@ -6,8 +6,16 @@ from sklearn.model_selection import train_test_split
 #from sklearn.model_selection import train_test_split
 #import cv2 as cv
 
-def LoadDataBase(TrainingPath:str, TestPath:str,batchsize=150):
+def LoadDataBaseM1(TrainingPath:str, TestPath:str,batchsize=150,input_size=45):
+    """
+        Fonction de chargement des données pour le modele de classification des blcos
 
+        Parametres:
+          TrainingPath: Emplacement des donnees d'entrainement
+          TestPath: Emplacement des données de test
+          batchsize:
+          input_size: Taile d'un bloc
+    """
     train_datagen = ImageDataGenerator(
         rescale=1./255,
         horizontal_flip=True,
@@ -15,7 +23,7 @@ def LoadDataBase(TrainingPath:str, TestPath:str,batchsize=150):
 
     training_set= train_datagen.flow_from_directory(
         TrainingPath,
-        target_size=(32, 32),
+        target_size=(input_size, input_size),
         color_mode="grayscale",
         batch_size=batchsize,
         class_mode='categorical'
@@ -27,7 +35,7 @@ def LoadDataBase(TrainingPath:str, TestPath:str,batchsize=150):
 
     test_set= test_datagen.flow_from_directory(
             TestPath,
-            target_size=(32, 32),
+            target_size=(input_size, input_size),
             color_mode="grayscale",
             batch_size=batchsize,
             class_mode='categorical'
@@ -36,37 +44,16 @@ def LoadDataBase(TrainingPath:str, TestPath:str,batchsize=150):
     return training_set,test_set
 
 
-
-def LoadDataBase2(DataSet_Path:str,Images_Path:str, TestSplit=0.2):
+def LoadDataBaseM2(DataSet_Path:str,Images_Path:str, TestSplit=0.2):
     
-    TrainSet_X, TestSet_X= [],[]
-    df = pd.read_csv(DataSet_Path)
-    Train, Test = train_test_split(df, test_size=TestSplit,shuffle=True)
+    """
+        Charger les données pour le modele de detection de la minuties
 
-
-    for path in Train["Images"]:
-      img = cv.imread(Images_Path+"/"+path, cv.IMREAD_GRAYSCALE)
-      #img = np.reshape(img,(32,32,1))
-
-      TrainSet_X.append(img)
-
-    for path in Test["Images"]:
-      img = cv.imread(Images_Path+"/"+path, cv.IMREAD_GRAYSCALE)
-      #img = np.reshape(img,(32,32,1))
-
-      TestSet_X.append(img)
-
-    TrainSet_Y = Train[["X","Y"]]
-    TestSet_Y = Test[["X","Y"]]
-
-    TrainSet_X = np.array(TrainSet_X)
-    TestSet_X = np.array(TestSet_X)
-    print(f"Taille de Train {len(TrainSet_X)} {len(TrainSet_Y)}")
-    print(f"Taille de Test {len(TestSet_X)} {len(TestSet_Y)}")
-
-    return TrainSet_X,TestSet_X,TrainSet_Y, TestSet_Y
-
-def LoadDataBaseWithNormal(DataSet_Path:str,Images_Path:str, TestSplit=0.2):
+        Parametres:
+          Dataset_Path: L'emplacement du fichier CSV
+          Images_Path: L'emplacement des blocs
+          TestSplit: Le pourcentage du testset
+    """
 
     TrainSet_X, TestSet_X= [],[]
 
@@ -86,7 +73,6 @@ def LoadDataBaseWithNormal(DataSet_Path:str,Images_Path:str, TestSplit=0.2):
       img = cv.imread(Images_Path+"/"+path)
       img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
       img = img/255
-      #img = np.reshape(img,(32,32,1))
 
       TrainSet_X.append(img)
 
@@ -94,7 +80,6 @@ def LoadDataBaseWithNormal(DataSet_Path:str,Images_Path:str, TestSplit=0.2):
       img = cv.imread(Images_Path+"/"+path)
       img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
       img = img/255
-      #img = np.reshape(img,(32,32,1))
 
       TestSet_X.append(img)
 

@@ -48,20 +48,6 @@ def RandomSelection(population, proba_parent):
     return parents
 
 
-def BestRankedSelectionV2(population, proba_selection):
-    nb_parents = int(len(population)*proba_selection)
-
-    population_sorted = sorted(population, key=lambda x: x[1],reverse=True)
-
-    parents  = [parent[:] for parent in [indiv[0][:] for indiv in population_sorted]]
-    ranks = list(range(1,len(parents)+1))
-    #Pi = Min+(Max-Min)(rang(i)-1)/(N-1).
-    probability = [rank/sum(ranks) for rank in ranks ]
-    
-    selected = random.choices(parents,weights=probability, k=nb_parents)
-    
-    return selected
-
 def SelectionAphaBeta(population,children, alpha, beta):
     
     pass

@@ -3,7 +3,7 @@ from keras.layers import Conv2D, Dense, Input, MaxPool2D, Dropout, Activation, F
 from keras.activations import relu, softmax
 from keras import regularizers
 
-def CreateModel1(optimizer=None,input_shape=(),nb_classe=2, individual=[],
+def CreateBlocsClassificationModel(optimizer=None,input_shape=(),nb_classe=2, individual=[],
                     version="static",loss='categorical_crossentropy',
                     mertics="accuracy"):
     """
@@ -56,63 +56,7 @@ def CreateModel1(optimizer=None,input_shape=(),nb_classe=2, individual=[],
 
     return my_model
 
-
-
-def CreateModel2(optimizer=None,input_shape=(),nb_features=2, individual=[],
-                version="dynamique",loss='categorical_crossentropy',
-                mertics="accuracy"):
-    """
-        Fonction de ceation du 2eme modele utilisé detecter la minuties dnas les blocs
-            -  Input Shape : dimension d'entré
-            -  nb_feature: nombre de parametre predire
-            -  individual: le chromosome de l'individu
-            -  version: version de l'encodage soit "dynamique" ou "statique"
-            -  loss: la fonction erreur
-            -  metrics: metrique d'evaluation
-    """
-    my_model = Sequential(name="Model")
-    my_model.add(Input(shape=input_shape))
-    #my_model.add(Reshape((28,28,1)))
-
-    conv_layers = individual[0]
-    dense_layers = individual[1]
-
-    if version=="dynamic":
-        for i,layer in enumerate(conv_layers):
-            my_model.add(Conv2D(layer[0], layer[1], name=f'conv{i}',padding="same")) #Add conv parameters
-            if layer[3] == 1: my_model.add(Activation(relu))
-            if layer[2] != 0: my_model.add(MaxPool2D((layer[2],layer[2]),padding="same"))
-
-        my_model.add(Flatten())
-
-        for i,layer in enumerate(dense_layers):
-            my_model.add(Dense(layer[0]))
-            if layer[1] == 1:  my_model.add(Activation(relu))
-
-    elif version=="static":
-        for i,layer in enumerate(conv_layers):
-            if layer != []:
-                my_model.add(Conv2D(layer[0], layer[1], name=f'conv{i}',padding="same")) #Add conv parameters
-                if layer[3] == 1:  my_model.add(Activation(relu))
-                if layer[2] != 0: my_model.add(MaxPool2D((layer[2],layer[2]),padding="same"))
-    
-        my_model.add(Flatten())
-
-        for i,layer in enumerate(dense_layers):
-            if layer != []:
-                my_model.add(Dense(layer[0]))
-                if layer[1] == 1:  my_model.add(Activation(relu))
-    else:
-        print("Erreur de version dans le parametre version")
-    
-    my_model.add(Dense(nb_features))
-    my_model.compile(loss=loss, optimizer=optimizer, metrics=[mertics])
-
-    return my_model
-
-
-
-def ModelAvecregul(optimizer=None,input_shape=(),nb_classe=2, individual=[],
+def CreateMinutaeDetectionModel(optimizer=None,input_shape=(),nb_classe=2, individual=[],
                     regularization = 0.01,
                     version="static",loss='categorical_crossentropy',
                     mertics="accuracy"):
@@ -134,15 +78,15 @@ def ModelAvecregul(optimizer=None,input_shape=(),nb_classe=2, individual=[],
     #kernel_regularizer=regularizers.l2(0.01),
     if version=="dynamic":
         for i,layer in enumerate(conv_layers):
-            my_model.add(Conv2D(layer[0], layer[1], kernel_regularizer=regularizers.l2(regularization),name=f'conv{i}',padding="same")) #Add conv parameters
-            #my_model.add(Dropout(0.25))
+            my_model.add(Conv2D(layer[0], layer[1], name=f'conv{i}',padding="same")) #Add conv parameters
+            my_model.add(Dropout(0.25))
             if layer[3] == 1: my_model.add(Activation(relu))
             if layer[2] != 0: my_model.add(MaxPool2D((layer[2],layer[2]),padding="same"))
 
         my_model.add(Flatten())
 
         for i,layer in enumerate(dense_layers):
-            my_model.add(Dense(layer[0],kernel_regularizer=regularizers.l2(regularization)))
+            my_model.add(Dense(layer[0]))
             if layer[1] == 1:  my_model.add(Activation(relu))
 
     elif version=="static":
@@ -167,26 +111,3 @@ def ModelAvecregul(optimizer=None,input_shape=(),nb_classe=2, individual=[],
 
     return my_model
 
-def Model45Net(optimizer=None,input_shape=(),loss='categorical_crossentropy',mertics="accuracy"):
-
-    model = Sequential(name="Model45Net")
-    model.add(Input(shape=input_shape))
-
-    model.add(Conv2D(kernel_size=6,filters=32))
-    model.add(MaxPool2D(pool_size=(2,2)))
-
-    model.add(Conv2D(kernel_size=5,filters=128))
-    model.add(MaxPool2D(pool_size=(2,2)))
-
-    model.add(Conv2D(kernel_size=3,filters=512))
-    model.add(MaxPool2D(pool_size=(2,2)))
-
-    model.add(Flatten())
-
-    model.add(Dense(1024))
-    model.add(Dense(128))
-    model.add(Dense(9))
-
-    model.compile(loss=loss, optimizer=optimizer, metrics=[mertics])
-
-    return model

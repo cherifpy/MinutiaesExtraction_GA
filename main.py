@@ -11,8 +11,7 @@ import sys
 if __name__ == "__main__":
 
     
-    TrainSetPath = sys.argv[1]
-    TestSetPath = sys.argv[2]
+    
 
     date = datetime.datetime.now()
     date = date.strftime("%m_%d_%H_%M_%S")
@@ -42,14 +41,23 @@ if __name__ == "__main__":
         csv_file.close()
 
 
-    TrainSet,TestSet = LoadDataBase(TrainSetPath,TestSetPath,BATCH_SIZE,INPUT_SHAPE[0])
+    if MODEL_MUN == 1:
+        TrainSetPath = sys.argv[1]
+        TestSetPath = sys.argv[2]
+        TrainSet,TestSet = LoadDataBaseM1(TrainSetPath,TestSetPath,BATCH_SIZE,INPUT_SHAPE[0])
 
-    Database = [[TrainSet],[TestSet]]
+        Database = [[TrainSet],[TestSet]]
+    else:
+        csv_file = sys.argv[1]
+        image_path = sys.argv[2] 
+        TrainSet_X,TestSet_X,TrainSet_Y, TestSet_Y = LoadDataBaseM2(csv_file,image_path)
+        Database = [[TrainSet_X,TrainSet_Y],[TestSet_X,TestSet_Y]]
 
 
     optimizer = SGD(LEARNING_RATE)
     best_solution = GeneticAlgorithme(VERSION_ENCODAGE,POPULATION_SIZE,NB_OF_GENERATION,PROBA_PARENTS,
-                                      ELITE_FRAC,CHILDREN_FRAC,optimizer,INPUT_SHAPE,Database,NB_EPOCHS,BATCH_SIZE,PROBA_CROSSOVER,PROBA_MUTATION,PATHS)
+                                      ELITE_FRAC,CHILDREN_FRAC,optimizer,INPUT_SHAPE,Database,NB_EPOCHS,
+                                      BATCH_SIZE,PROBA_CROSSOVER,PROBA_MUTATION,PATHS,MODEL_MUN)
     
     
     data = {}
