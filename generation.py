@@ -9,6 +9,14 @@ from parametres import REGULARIZATION, NB_CLASSES
 
 def InitPopulation(population_size,version="dynamic"):
 
+    """
+        Creation de la generation initale de maniere aleatoire
+
+        parametres:
+            - population_size: taille de la population 
+            - version: la version de l'encodage a utiliser "dynamic" et "static"
+    """
+
     population = []
     individual = []
     conv_layers =  []
@@ -59,6 +67,23 @@ def Fitness(version_encodage,individual,optimizer=None,input_shape=(),
                      test_set=[],nb_epochs = 4, 
                      batch_size = 100,validation_split = 0.2,model=1):
     
+    """
+        Fonction d'evaluation d'une solution dans l'algorithme genetique
+        
+        parametres:
+            - version_encodage: soit encodage dynamic ou static
+            - individu: le cromosome de la solution a evaluer
+            - optimizer: l'algorithme d'apprentissage
+            - input_shape: dimension des blocs d'entrainement
+            - nb_classe: nombre de classe de classification
+            - train_set: ensemble d'entrainement
+            - test_set: ensemble de test
+            - nb_epochs: nombre d'epochs d'entrainement
+            - validation_split: pourcentage de donnes utilisées pour la validations
+            - model: le numero du model recherche 1 ou 2
+    """
+    
+    
     if model == 1:
         try:
             model = CreateBlocsClassificationModel(optimizer=optimizer,input_shape=input_shape,
@@ -93,6 +118,20 @@ def EvaluatePopulation(version_endcodage,population = [], optimizer = None,input
                         DataBase=[], nb_epochs = 15,
                         batch_size = 50,paths:dict = None,nb_generation = 0,model=1):
 
+    """
+        Fonction d'evaluation de la population 
+
+        parametres:
+            - version_encodage: version de l'encodage a utiliser "dynamic" ou "static"
+            - population: la population a evaluer
+            - optimizer: l'algorithme d'entrainement
+            - input_shape: dimension des blocs d'entrainement
+            - DataBase: données d'entrainement et de test
+            - paths: emlacements des fichiers de resultats
+            - nb_generations: le numero de la generation courante
+            - model: le numero du model recherche 1 ou 2
+    """
+    
     evaluation = []
     if len(DataBase[0]) == 0: 
         
@@ -129,6 +168,15 @@ def EvaluatePopulation(version_endcodage,population = [], optimizer = None,input
 
 
 def WriteOnCSV(file_path, data):
+
+    """
+        Fonction d'ecriture dans un fichier CSV
+
+        parametres: 
+            - file_path: emplacement du fichier CSV
+            - data: les données a ajouter
+    """
+
     file = open(file_path, "a",newline='')
     writer = csv.DictWriter(file, fieldnames=list(data.keys()))
     writer.writerow(data)
@@ -136,6 +184,19 @@ def WriteOnCSV(file_path, data):
     
 
 def AddToMemorie(file_path, individual, train_acc,fitness,time):
+    
+    """
+        Fonction d'ajout d'une solution dans la memoire de l'algorithme genetique
+
+        parametres:
+            - file_path: emplacement du fichier CSV qui est la memoire de l'algorithme
+            - individual: la solution a ajouter
+            - train_acc: l'accuracy obtenue lors de l'evaluation de la solution
+            - fitness: la valeur de la fonction obejctif sur cette solution 
+            - time: le temps d'evaluation de la solution 
+
+    """
+    
     try:
         with open(file_path, 'r') as file:
             data = json.load(file)
@@ -165,6 +226,14 @@ def AddToMemorie(file_path, individual, train_acc,fitness,time):
 
 def CheckInMemorie(file_path:str, individu):
     
+    """
+        Fonction de verification si une solution est deja en memoire (déja evaluée)
+
+        parametres: 
+            - file_path: emplacement du fichier CSV (memoire)
+            - individu: l'individu a verifier        
+    """
+
     try:
         with open(file_path, 'r') as file:
             data = json.load(file)
@@ -181,6 +250,20 @@ def CheckInMemorie(file_path:str, individu):
 
 
 def AddToResults(file_path:str,nb_gener, individual, fitness,train_acc, time, time_per_epoch):
+    
+    """
+        Fonction d'ajout d'une solution dans le fichier results
+
+        parametres:
+            - file_path: emplacement du fichier results
+            - nb_gener: numero de la generation courante
+            - individual: la solution a ajouter
+            - train_acc: l'accuracy obtenue lors de l'evaluation de la solution
+            - fitness: la valeur de la fonction obejctif sur cette solution 
+            - time: le temps d'evaluation de la solution 
+            - time_per_epoch: 
+    """
+    
     try:
         with open(file_path, 'r') as file:
             data = json.load(file)
