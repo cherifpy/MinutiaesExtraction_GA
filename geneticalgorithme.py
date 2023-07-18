@@ -9,6 +9,29 @@ import copy
 def GeneticAlgorithme(version_encodage,population_size, nb_generation,proba_parents,elite_frac,
                       children_frac,optimizer,input_shape,DataBase, 
                       nb_epochs,batch_size,proba_crossover,proba_mutation,paths,model):
+    
+    """
+        Algorithme genetique
+
+        parametres:
+            version_encodage: Version de l'encodage "static" ou "dynamic"
+            population_size: Taille de la population
+            nb_generation: nombre de generation "condition d'arret"
+            proba_parents: probabilité des parents selectoinnés pour le croisement
+            elite_frac: proabilté des meilleurs individus selectionnés pour la future generation
+            children_frac: probabilité des enfants selectionés pour la future generation
+            optimizer: Algorithme d'entrainement
+            input_shape: Dimension des blocs
+            DataBase: Données d'evaluation de chaque solution [TrainSet, TestSet]
+            nb_epochs: Nombre d'epoch d'entrainemet
+            batch_size: Taille de chaque batchs
+            proba_crossover: probabilité de croisement
+            proba_mutation: probabilité de mutation 
+            paths: enplasement des fichier des resultats 
+            model: numero du modéle a optimiser
+    """
+
+
     best_in_generation = []
     #initalise la population aleatoirement
     population = InitPopulation(population_size,version_encodage)
