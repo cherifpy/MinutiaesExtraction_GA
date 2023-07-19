@@ -50,7 +50,7 @@ if __name__ == "__main__":
     else:
         csv_file = sys.argv[1]
         image_path = sys.argv[2] 
-        TrainSet_X,TestSet_X,TrainSet_Y, TestSet_Y = LoadDataBaseM2(csv_file,image_path)
+        TrainSet_X,TestSet_X,TrainSet_Y, TestSet_Y = LoadDataBaseM2(csv_file,image_path,TestSplit=TEST_SIZE)
         Database = [[TrainSet_X,TrainSet_Y],[TestSet_X,TestSet_Y]]
 
 
