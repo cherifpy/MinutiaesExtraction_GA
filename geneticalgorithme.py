@@ -65,7 +65,7 @@ def GeneticAlgorithme(version_encodage,population_size, nb_generation,proba_pare
             children_after_mutation.append(copy.deepcopy(mutated_child))
         
         #selection la population de la future generation
-        population = SelectNextGeneration(population_evaluated, children_after_mutation,population_size,elite_frac,children_frac)
+        population = SelectNextGeneration(population_evaluated, children_after_mutation,elite_frac,children_frac)
         
         """        
         #Evaluer la population
