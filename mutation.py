@@ -1,7 +1,16 @@
 import random
 from parametres import *
 import copy
-def AddConvLayer(child,i=0,version="dynamic"):
+def AddConvBloc(child,i=0,version="dynamic"):
+
+    """
+        Fonction d'ajout d'un bloc de convolutio
+        
+        paramtres:
+            - child: solution a muter
+            - i: l'emplacement ou le bloc sera ajouté
+    """
+
     individual = copy.deepcopy(child)
     layer = []
 
@@ -30,7 +39,17 @@ def AddConvLayer(child,i=0,version="dynamic"):
     return copy.deepcopy(individual)
   
 
-def DelConvLayer(child,i=0,version="dynamic"):
+def DelConvBloc(child,i=0,version="dynamic"):
+
+    """
+        Fonction de suppression d'un bloc de convolution
+
+        paramtres:
+            - child: solution a muter
+            - i: l'emplacement ou le bloc sera ajouté
+
+    """
+
     individual = copy.deepcopy(child)
     if version == "dynamic":
         if len(individual[0]) > min(nb_bloc_conv_valeus):
@@ -42,7 +61,16 @@ def DelConvLayer(child,i=0,version="dynamic"):
         
     return copy.deepcopy(individual)
 
-def AlterConvLayer(child,i=0,version="dynamic"):
+def AlterConvBloc(child,i=0,version="dynamic"):
+
+
+    """
+        Fonction de modification d'un bloc de convolution
+
+        paramtres:
+            - child: solution a muter
+            - i: l'emplacement ou le bloc sera ajouté
+    """
     individual = copy.deepcopy(child)
     if version=="dynamic":
         rand_layer = random.randrange(0,len(individual[0]))
@@ -64,6 +92,14 @@ def AlterConvLayer(child,i=0,version="dynamic"):
     return copy.deepcopy(individual)
 
 def AddDenseLayer(child,i=0,version="dynamic"):
+
+    """
+        Fonction d'ajout une couche entierement connectée
+
+        paramtres:
+            - child: solution a muter
+            - i: l'emplacement ou le bloc sera ajouté
+    """
     individual = copy.deepcopy(child)
     layer = []
     if version == "dynamic":
@@ -84,6 +120,15 @@ def AddDenseLayer(child,i=0,version="dynamic"):
   
 
 def DelDenseLayer(child,i=0,version="dynamic"):
+
+    """
+        Fonction de suppression d'une couche entierement connectée
+
+        paramtres:
+            - child: solution a muter
+            - i: l'emplacement ou le bloc sera ajouté
+    """
+
     individual = copy.deepcopy(child)
     if version == "dynamic":
         if len(individual[1]) > min(nb_dense_layer_valeus):
@@ -96,6 +141,14 @@ def DelDenseLayer(child,i=0,version="dynamic"):
   
 
 def AlterDenseLayer(child,i=0,version="dynamic"):
+
+    """
+        Fonction de modification d'une couche entierement connectée
+
+        paramtres:
+            - child: solution a muter
+            - i: l'emplacement ou le bloc sera ajouté
+    """
     individual = copy.deepcopy(child)
     if version=="dynamic":
 
@@ -118,6 +171,14 @@ def AlterDenseLayer(child,i=0,version="dynamic"):
     return copy.deepcopy(individual)
 
 def Mutation(child, proba_mutation=1, version="dynamic"):
+
+    """
+        Fonction d'application de la mutation
+
+        parametres:
+            - child: solution a muter
+            - proba_mutation: la probabilité de mutation
+    """
     
     if random.random() > proba_mutation:
         return copy.deepcopy(child)
@@ -139,9 +200,9 @@ def Mutation(child, proba_mutation=1, version="dynamic"):
         while (rand_operation==2 and len(individual[0]) == min(nb_bloc_conv_valeus)) or (rand_operation==1 and len(individual[0]) == max(nb_bloc_conv_valeus)):
             rand_operation = random.choice([1,2,3])
 
-        if rand_operation == 1: individual = copy.deepcopy(AddConvLayer(individual,version=version))
-        elif rand_operation == 2:individual = copy.deepcopy(DelConvLayer(individual,version=version))
-        else: individual = copy.deepcopy(AlterConvLayer(individual,version=version))
+        if rand_operation == 1: individual = copy.deepcopy(AddConvBloc(individual,version=version))
+        elif rand_operation == 2:individual = copy.deepcopy(DelConvBloc(individual,version=version))
+        else: individual = copy.deepcopy(AlterConvBloc(individual,version=version))
     
     elif version == "static":
 
@@ -162,14 +223,14 @@ def Mutation(child, proba_mutation=1, version="dynamic"):
         if individual[0][rand_layer]!=[] and del_layer_conv == True:
             
             rand_operation = random.choice([1,2])
-            if rand_operation == 0: individual = AlterConvLayer(individual, rand_layer,version=version)[:]
-            else: individual = DelConvLayer(individual,rand_layer,version=version)[:]
+            if rand_operation == 0: individual = AlterConvBloc(individual, rand_layer,version=version)[:]
+            else: individual = DelConvBloc(individual,rand_layer,version=version)[:]
 
         elif individual[0][rand_layer] != [] and del_layer_conv == False:
-            individual = AlterConvLayer(individual, rand_layer,version=version)[:]
+            individual = AlterConvBloc(individual, rand_layer,version=version)[:]
 
         else :
-            individual = AddConvLayer(individual, rand_layer,version=version)[:]
+            individual = AddConvBloc(individual, rand_layer,version=version)[:]
 
         rand_layer = random.randrange(0,max(nb_dense_layer_valeus))
 
@@ -181,7 +242,7 @@ def Mutation(child, proba_mutation=1, version="dynamic"):
 
         elif individual[1][rand_layer] != [] and del_layer_dense == False:
             individual = AlterDenseLayer(individual, rand_layer,version=version)[:]
-        else :  individual = AddConvLayer(individual, rand_layer,version=version)[:]     
+        else :  individual = AddDenseLayer(individual, rand_layer,version=version)[:]     
         
     else:
         print("Erreur de version")

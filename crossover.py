@@ -24,7 +24,7 @@ def OnePointCrossoverConv(parent1, parent2, proba_crossover = 0.7):
 
 def OnePointCrossoverDense(parent1, parent2, proba_crossover=0.7):
     """
-        Crossover applique sur la partie des couches fully connected
+        Crossover applique sur la partie des couches entierement connectées
             -  proba_crossover: la probabilité de faire un crossover
     """
     parent_1 = copy.deepcopy(parent1)
@@ -120,7 +120,7 @@ def TwoPointsCrossover2Parts(parent1,parent2,proba_crossover):
 def TwoPointsCrossoverConv(parent1,parent2,proba_crossover):
 
     """
-        Random 2 point crossover applique sur les deux parties du chromosome 
+        Random 2 point crossover applique sur la partie des blocs de convolution
             -  proba_crossover: la probabilité de faire un crossover
     """
     parent_1 = parent1[:]
@@ -151,7 +151,7 @@ def TwoPointsCrossoverConv(parent1,parent2,proba_crossover):
 
 def TwoPointsCrossoverDense(parent1,parent2,proba_crossover):
     """
-        Random 2 point crossover applique sur la partie des couche de convolutions du chromosome 
+        Random 2 point crossover applique sur la partie des couche entierement connectées du chromosome 
             -  proba_crossover: la probabilité de faire un crossover
     """
     parent_1 = parent1[:]

@@ -47,7 +47,7 @@ def LoadDataBaseM1(TrainingPath:str, TestPath:str,batchsize=150,input_size=45):
 def LoadDataBaseM2(DataSet_Path:str,Images_Path:str, TestSplit=0.2):
     
     """
-        Charger les données pour le modele de detection de la minuties
+        Charger les données pour le modele de detection de la minutie dans un bloc
 
         Parametres:
           Dataset_Path: L'emplacement du fichier CSV

@@ -2,35 +2,3 @@ tensorflow==2.12.0
 numpy==1.23.5
 opencv-python==4.6.0.66
 pandas==1.5.2
-
-#Define the resource requirements here using #SBATCH
-
-#For requesting 4 CPUs
-#SBATCH -c 4
-
-#SBATCH -p nvidia
-#SBATCH --gres=gpu:1
-
-#Max wallTime for the job
-#SBATCH -t 00:05:00
-
-
-#Resource requiremenmt commands end here
-
-# Output and error files
-#SBATCH -o Errors/job.%J.out
-#SBATCH -e Errors/job.%J.err
-
-#Add the lines for running your code/application
-module purge
-
-#activate any environments if required
-
-
-
-source ~/.bashrc
-conda activate myenv2
-
-#Execute the code
-python test.py
-#python main.py "../Database/TrainSet" "../Database/TestSet"

@@ -8,7 +8,7 @@ def CreateBlocsClassificationModel(optimizer=None,input_shape=(),nb_classe=2, in
                     mertics="accuracy"):
     """
         Fonction de ceation du pemiere modele utilisé pour la classification des blocs
-            -  Input Shape : dimension d'entré
+            -  Input_shape : dimension d'entré
             -  nb_classe: nombre de classe de classification dans notre cas c'est 2
             -  individual: le chromosome de l'individu
             -  version: version de l'encodage soit "dynamique" ou "statique"
